@@ -1,0 +1,2 @@
+set EIFFEL_SRC=%cd%
+set ISE_LIBRARY=%EIFFEL_SRC%

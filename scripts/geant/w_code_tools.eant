@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<project name="w_code_tools" default="menu">
+
+	<target name="help">
+		<echo message="menu" />
+		<echo message="----" />
+		<echo message="geant clean" />
+		<echo message="geant compile" />
+		<echo message="geant recompile" />
+	</target>
+	<target name="menu">
+		<set name="_answer" value="" />
+		<echo message="1) clean" />
+		<echo message="2) compile" />
+		<echo message="3) compile as wkbench" />
+		<echo message="4) clean+compile" />
+		<echo message="5) clean+compile_wkbench" />
+
+		<input message=" -> " variable="_answer" validregexp="^[0-5]+$" answer_required="true" />
+		<echo message="Bye ..." if="${_answer}=0" />
+		<geant target="clean" if="${_answer}=1" />
+		<geant target="compile" if="${_answer}=2" />
+		<geant target="compile_wkbench" if="${_answer}=3" />
+
+		<geant target="clean" if="${_answer}=4" />
+		<geant target="compile" if="${_answer}=4" />
+
+		<geant target="clean" if="${_answer}=5" />
+		<geant target="compile_wkbench" if="${_answer}=5" />
+	</target>
+
+	<target name="clean">
+		<echo message="Cleaning ${cwd}" />
+		<delete>
+			<fileset include="@(**/Makefile|**/*.obj|**/*.lib|**/finished|**/*.exe|**/*.lnk|**/*.res)"/>
+		</delete>
+	</target>
+	<target name="compile">
+		<echo message="Compile ${cwd}" />
+		<exec executable="finish_freezing"/>			
+	</target>
+	<target name="compile_wkbench">
+		<set name="old_ISE_EIFFEL" value="$ISE_EIFFEL" />
+		<setenv name="ISE_EIFFEL" value="${ISE_EIFFEL}_wkbench" />
+		<geant target="compile" />
+		<setenv name="ISE_EIFFEL" value="$old_ISE_EIFFEL" />
+	</target>
+
+</project>
